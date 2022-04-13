@@ -1,6 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
+import CustomDrawer from './components/Navigation.js';
 
 import { Layout } from './views';
 
@@ -17,7 +18,7 @@ export default function App() {
       >
         <Stack.Screen
            name='Home'
-           component={Layout}
+           component={CustomDrawer}
         />
 
       </Stack.Navigator>
