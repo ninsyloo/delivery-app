@@ -5,6 +5,7 @@ const screens = {
     cart: "Cart",
     favourite: "Favourite",
     notification: "Notification",
+    my_wallet: "My Wallet"
 }
 
 const bottom_tabs = [
@@ -99,7 +100,7 @@ const tags = [
     },
     {
         id: 8,
-        label: "Taccos"
+        label: "Tacos"
     }
 ]
 
