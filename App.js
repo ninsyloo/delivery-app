@@ -1,11 +1,16 @@
 import React, {useState} from 'react';
+
+import {createStore, applyMiddleware} from 'redux';
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+import rootReducer from './store/rootReducer.js';
+
 import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
+
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import CustomDrawer from './components/Navigation.js';
-
-import { Layout } from './views';
 
 const loadFonts = () =>{
   return Font.loadAsync({
@@ -17,6 +22,11 @@ const loadFonts = () =>{
 }
 
 const Stack = createStackNavigator();
+const store = createStore(
+  rootReducer,
+  applyMiddleware(thunk)
+)
+
 
 export default function App() {
   const [fontLoaded, setFontLoaded] = useState(false);
@@ -33,6 +43,7 @@ export default function App() {
   }
 
   return (
+    <Provider store={store}>
     <NavigationContainer>
       <Stack.Navigator
           screenOptions={{
@@ -47,5 +58,6 @@ export default function App() {
 
       </Stack.Navigator>
     </NavigationContainer>
+    </Provider>
   );
 }

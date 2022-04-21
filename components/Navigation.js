@@ -15,86 +15,26 @@ import {
     dummyData
 } from '../constants';
 import Animated from "react-native-reanimated";
+import { connect } from "react-redux";
+import { setSelectedTab } from "../store/tabs/tabActions";
+
+
 
 const Drawer = createDrawerNavigator();
-const styles = StyleSheet.create({
-  container:{
-    flex:1,
-    backgroundColor:COLORS.primary
-  },
-  close_container:{
-    alignItems:"flex-start",
-    justifyContent:"center"
-  },
-  button_close:{
-    alignItems:"center",
-    justifyContent:"center",
-    marginBottom: SIZES.padding
-  },
-  img_close:{
-    height: 20,
-    width:20,
-    tintColor: COLORS.white
-  },
-  button_profile:{
-    flexDirection:"row",
-    marginTop:SIZES.radius,
-    alignItems: "center",
-    marginBottom: SIZES.padding
-  },
-  img_profle:{
-    width:50,
-    height: 50,
-    borderRadius: SIZES.radius
-  },
-  pcontainer_profile:{
-    marginLeft: SIZES.radius
-  },
-  p_profile:{
-    color:COLORS.white,
-    ...FONTS.h3
-  },
-  p_profle1:{
-    color: COLORS.white,
-    ...FONTS.body4
-  },
-  con_items:{
 
-  },
-  drawer_item:{
-    flexDirection:"row",
-    height: 40,
-    marginBottom: SIZES.base,
-    alignItems:"center",
-    paddingLeft: SIZES.radius,
-    borderRadius: SIZES.radius
-  },
-  drawer_img:{
-    width: 20,
-    height: 20,
-    tintColor: COLORS.white
-  },
-  drawer_text:{
-    marginLeft: 15,
-    color: COLORS.white,
-    ...FONTS.h3
-  },
-  divider:{
-    height: 1,
-    marginVertical:SIZES.radius,
-    marginLeft:SIZES.radius,
-    marginLeft: SIZES.radius,
-    backgroundColor: COLORS.lightGray1
-  },
-  logout:{
-    marginTop: 50
-  },
-})
-
-const CustomDrawerItem = ({label, icon}) =>{
+const CustomDrawerItem = ({label, icon, isFocused, onPress}) =>{
   return(
     <TouchableOpacity
-        style={styles.drawer_item}
+        style={{
+          flexDirection:"row",
+          height: 40,
+          marginBottom: SIZES.base,
+          alignItems:"center",
+          paddingLeft: SIZES.radius,
+          borderRadius: SIZES.radius,
+          backgroundColor: isFocused ? COLORS.transparentBlack1 : null
+        }}
+        onPress = {onPress}
     >
       <Image 
       source={icon}
@@ -105,7 +45,7 @@ const CustomDrawerItem = ({label, icon}) =>{
   )
 }
 
-const CustomDrawerContent = ({navigation}) => {
+const CustomDrawerContent = ({navigation, selectedTab, setSelectedTab}) => {
   return(
     <DrawerContentScrollView
       scrollEnabled={true}
@@ -150,14 +90,21 @@ const CustomDrawerContent = ({navigation}) => {
           <CustomDrawerItem 
               label={constants.screens.home}
               icon={icons.home}
+              isFocused={selectedTab == constants.screens.home}
+              onPress={()=>{
+                setSelectedTab(constants.screens.home)
+                navigation.navigate('Layout')
+              }}
           />
           <CustomDrawerItem
               label={constants.screens.my_wallet}
               icon={icons.wallet}
+              onPress={()=>setSelectedTab(constants.screens.my_wallet)}
           />
           <CustomDrawerItem
               label={constants.screens.notification}
               icon={icons.notification}
+              onPress={()=>setSelectedTab(constants.screens.notification)}
           />
           <CustomDrawerItem
               label={constants.screens.favourite}
@@ -204,7 +151,7 @@ const CustomDrawerContent = ({navigation}) => {
 }
 
 
-const CustomDrawer =()=>{
+const CustomDrawer =({selectedTab, setSelectedTab})=>{
 
   const dimensions = useWindowDimensions();
   const isLargeScreen = dimensions.width >= 768;
@@ -220,7 +167,7 @@ const CustomDrawer =()=>{
     outputRange: [0, 26]
   })
 
-const animatedStyle = { borderRadius, transform: [{scale}]}
+const animatedStyle = { borderRadius, transform: [{scale}], overflow:'hidden'}
 
 
   return(
@@ -249,6 +196,8 @@ const animatedStyle = { borderRadius, transform: [{scale}]}
                 return (
                   <CustomDrawerContent
                       navigation={props.navigation}
+                      selectedTab={selectedTab}
+                      setSelectedTab={setSelectedTab}
                   />
                 )
               }}
@@ -263,4 +212,84 @@ const animatedStyle = { borderRadius, transform: [{scale}]}
   )
 }
 
-export default CustomDrawer;
+
+function mapStateToProps(state){
+  return {
+    selectedTab: state.tabReducer.selectedTab
+  }
+}
+
+function mapDispatchToProps(dispatch){
+  return{
+    setSelectedTab: (selectedTab) => { return dispatch
+      (setSelectedTab(selectedTab))}
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CustomDrawer)
+
+const styles = StyleSheet.create({
+  container:{
+    flex:1,
+    backgroundColor:COLORS.primary
+  },
+  close_container:{
+    alignItems:"flex-start",
+    justifyContent:"center"
+  },
+  button_close:{
+    alignItems:"center",
+    justifyContent:"center",
+    marginBottom: SIZES.padding
+  },
+  img_close:{
+    height: 20,
+    width:20,
+    tintColor: COLORS.white
+  },
+  button_profile:{
+    flexDirection:"row",
+    marginTop:SIZES.radius,
+    alignItems: "center",
+    marginBottom: SIZES.padding
+  },
+  img_profle:{
+    width:50,
+    height: 50,
+    borderRadius: SIZES.radius
+  },
+  pcontainer_profile:{
+    marginLeft: SIZES.radius
+  },
+  p_profile:{
+    color:COLORS.white,
+    ...FONTS.h3
+  },
+  p_profle1:{
+    color: COLORS.white,
+    ...FONTS.body4
+  },
+  con_items:{
+
+  },
+  drawer_img:{
+    width: 20,
+    height: 20,
+    tintColor: COLORS.white
+  },
+  drawer_text:{
+    marginLeft: 15,
+    color: COLORS.white,
+    ...FONTS.h3
+  },
+  divider:{
+    height: 1,
+    marginVertical:SIZES.radius,
+    marginLeft:SIZES.radius,
+    marginLeft: SIZES.radius,
+    backgroundColor: COLORS.lightGray1
+  },
+  logout:{
+    marginTop: 50
+  },
+})
