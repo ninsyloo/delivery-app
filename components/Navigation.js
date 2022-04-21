@@ -99,16 +99,29 @@ const CustomDrawerContent = ({navigation, selectedTab, setSelectedTab}) => {
           <CustomDrawerItem
               label={constants.screens.my_wallet}
               icon={icons.wallet}
-              onPress={()=>setSelectedTab(constants.screens.my_wallet)}
+              isFocused={selectedTab == constants.screens.my_wallet}
+              onPress={()=>{
+                setSelectedTab(constants.screens.my_wallet)
+                navigation.navigate('Layout')
+              }}
           />
           <CustomDrawerItem
               label={constants.screens.notification}
               icon={icons.notification}
-              onPress={()=>setSelectedTab(constants.screens.notification)}
+              isFocused={selectedTab == constants.screens.notification}
+              onPress={()=>{
+                setSelectedTab(constants.screens.notification)
+                navigation.navigate('Layout')
+              }}
           />
           <CustomDrawerItem
               label={constants.screens.favourite}
               icon={icons.love}
+              isFocused={selectedTab == constants.screens.favourite}
+              onPress={()=>{
+                setSelectedTab(constants.screens.favourite)
+                navigation.navigate('Layout')
+              }}
           />
 
           {/* divider */}
@@ -118,22 +131,47 @@ const CustomDrawerContent = ({navigation, selectedTab, setSelectedTab}) => {
           <CustomDrawerItem
               label="Track Your Order"
               icon={icons.location}
+              isFocused={selectedTab == "Track Your Order"}
+              onPress={()=>{
+                setSelectedTab("Track Your Order")
+                navigation.navigate('Layout')
+              }}
           />
           <CustomDrawerItem
               label="Coupons"
               icon={icons.coupon}
+              isFocused={selectedTab == "Coupons"}
+              onPress={()=>{
+                setSelectedTab("Coupons")
+                navigation.navigate('Layout')
+              }}
           />
           <CustomDrawerItem
               label="Settings"
               icon={icons.setting}
+              isFocused={selectedTab == "Settings"}
+              onPress={()=>{
+                setSelectedTab("Settings")
+                navigation.navigate('Layout')
+              }}
           />
           <CustomDrawerItem
               label="Invite a Friend"
               icon={icons.profile}
+              isFocused={selectedTab == "Invite a Friend"}
+              onPress={()=>{
+                setSelectedTab("Invite a Friend")
+                navigation.navigate('Layout')
+              }}
           />
           <CustomDrawerItem
               label="Help Center"
               icon={icons.help}
+              isFocused={selectedTab == "Help Center"}
+              onPress={()=>{
+                setSelectedTab("Help Center")
+                navigation.navigate('Layout')
+              }}
           />
 
         </View>
@@ -141,6 +179,11 @@ const CustomDrawerContent = ({navigation, selectedTab, setSelectedTab}) => {
           <CustomDrawerItem
               label="Logout"
               icon={icons.logout}
+              isFocused={selectedTab == "Logout"}
+              onPress={()=>{
+                setSelectedTab("Logout")
+                navigation.navigate('Layout')
+              }}
           />
         </View>
 
@@ -174,7 +217,7 @@ const animatedStyle = { borderRadius, transform: [{scale}], overflow:'hidden'}
     <View style={styles.container}>
       <Drawer.Navigator
           screenOptions={{
-            headerShown: true,
+            headerShown: false,
             drawerStyle: isLargeScreen ? {backgroundColor:"transparent"} : {
               flex:1,
               width:"65%",
