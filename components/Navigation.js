@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet, useWindowDimensions } from "react-native";
 import {
   createDrawerNavigator,
@@ -14,6 +14,7 @@ import {
     icons,
     dummyData
 } from '../constants';
+import Animated from "react-native-reanimated";
 
 const Drawer = createDrawerNavigator();
 const styles = StyleSheet.create({
@@ -27,17 +28,19 @@ const styles = StyleSheet.create({
   },
   button_close:{
     alignItems:"center",
-    justifyContent:"center"
+    justifyContent:"center",
+    marginBottom: SIZES.padding
   },
   img_close:{
-    height: 35,
-    width:35,
+    height: 20,
+    width:20,
     tintColor: COLORS.white
   },
   button_profile:{
     flexDirection:"row",
     marginTop:SIZES.radius,
-    alignItems: "center"
+    alignItems: "center",
+    marginBottom: SIZES.padding
   },
   img_profle:{
     width:50,
@@ -61,7 +64,7 @@ const styles = StyleSheet.create({
   drawer_item:{
     flexDirection:"row",
     height: 40,
-    marginBottom: "center",
+    marginBottom: SIZES.base,
     alignItems:"center",
     paddingLeft: SIZES.radius,
     borderRadius: SIZES.radius
@@ -84,7 +87,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.lightGray1
   },
   logout:{
-    marginBottom: SIZES.padding
+    marginTop: 50
   },
 })
 
@@ -189,7 +192,7 @@ const CustomDrawerContent = ({navigation}) => {
         </View>
         <View style={styles.logout}>
           <CustomDrawerItem
-              label="logout"
+              label="Logout"
               icon={icons.logout}
           />
         </View>
@@ -205,12 +208,26 @@ const CustomDrawer =()=>{
 
   const dimensions = useWindowDimensions();
   const isLargeScreen = dimensions.width >= 768;
+  const [progress, setProgress] = useState(new Animated.Value(0))
+
+  const scale = Animated.interpolateNode(progress, {
+    inputRange: [0, 1],
+    outputRange: [1, 0.8]
+  })
+
+  const borderRadius = Animated.interpolateNode(progress, {
+    inputRange: [0, 1],
+    outputRange: [0, 26]
+  })
+
+const animatedStyle = { borderRadius, transform: [{scale}]}
+
 
   return(
     <View style={styles.container}>
       <Drawer.Navigator
           screenOptions={{
-            /* headerShown: false, */
+            headerShown: true,
             drawerStyle: isLargeScreen ? {backgroundColor:"transparent"} : {
               flex:1,
               width:"65%",
@@ -225,6 +242,10 @@ const CustomDrawer =()=>{
           }}
               initialRouteName="Layout"
               drawerContent={props=>{
+                setTimeout(()=>{
+                  setProgress(props.progress)
+                }, 0)
+
                 return (
                   <CustomDrawerContent
                       navigation={props.navigation}
@@ -233,7 +254,8 @@ const CustomDrawer =()=>{
               }}
       >
         <Drawer.Screen name="Layout">
-          {props => <Layout {...props}/>}
+          {props => <Layout {...props}
+          drawerAnimationStyle={animatedStyle}/>}
         </Drawer.Screen>
 
       </Drawer.Navigator>
