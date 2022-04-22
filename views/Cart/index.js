@@ -3,8 +3,14 @@ import {View, Text} from 'react-native';
 
 const Cart = () => {
     return(
-        <View>
-
+        <View
+          style={{
+              flex:1,
+              alignItems: 'center',
+              justifyContent: 'center'
+          }}
+        >
+            <Text>CART</Text>
         </View>
     )
 }

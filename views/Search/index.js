@@ -1,10 +1,16 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View, Text} from 'react-native';
 
 const Search = ()=>{
     return(
-        <View>
-
+        <View
+          style={{
+              flex:1,
+              alignItems: 'center',
+              justifyContent: 'center'
+          }}
+        >
+            <Text>SEARCH</Text>
         </View>
     )
 }
